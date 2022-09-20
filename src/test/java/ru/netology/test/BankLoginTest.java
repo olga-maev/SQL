@@ -49,4 +49,20 @@ public class BankLoginTest {
         loginPage.getError();
     }
 
+    @Test
+    void shouldBlockWhenInvalidPasswordThreeTimes() {
+        var loginPage = open("http://localhost:9999", LoginPage.class);
+        var authInfo = new DataHelper.AuthInfo(DataHelper.getAuthInfoWithTestData().getLogin(), DataHelper.getRandomUser().getPassword());
+        loginPage.validLogin(authInfo);
+        loginPage.getError();
+        loginPage.cleanFields();
+        var authInfo1 = new DataHelper.AuthInfo(DataHelper.getAuthInfoWithTestData().getLogin(), DataHelper.getRandomUser().getPassword());
+        loginPage.validLogin(authInfo1);
+        loginPage.getError();
+        loginPage.cleanFields();
+        var authInfo2 = new DataHelper.AuthInfo(DataHelper.getAuthInfoWithTestData().getLogin(), DataHelper.getRandomUser().getPassword());
+        loginPage.validLogin(authInfo2);
+        loginPage.getBlockError();
+    }
+
 }
